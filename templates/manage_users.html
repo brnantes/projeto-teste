@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Usuários</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h1 class="mb-4 text-center">Gerenciar Usuários</h1>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                Criar Novo Usuário
+            </div>
+            <div class="card-body">
+                <form action="/manage_users" method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nome de Usuário:</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-mail:</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Senha:</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Função:</label>
+                        <select name="role" class="form-select" required>
+                            <option value="Admin">Admin</option>
+                            <option value="Gerente">Gerente</option>
+                            <option value="Vendedor">Vendedor</option>
+                            <option value="Usuário Comum">Usuário Comum</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Criar Usuário</button>
+                </form>
+            </div>
+        </div>
+
+        <h2 class="text-center mb-4">Lista de Usuários</h2>
+
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nome de Usuário</th>
+                    <th>E-mail</th>
+                    <th>Função</th>
+                    {% if current_user.role in ['Admin', 'Diretoria'] %}
+                        <th>Senha</th>  <!-- Coluna de senha visível para Admin e Diretoria -->
+                    {% endif %}
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.role }}</td>
+                    {% if current_user.role in ['Admin', 'Diretoria'] %}
+                        <td>{{ user.password }}</td>  <!-- Exibe a senha apenas para Admin e Diretoria -->
+                    {% endif %}
+                    <td>
+                        <a href="/edit_user/{{ user.id }}" class="btn btn-warning btn-sm">Editar</a>
+                        <form action="/delete_user/{{ user.id }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Botão para voltar ao dashboard -->
+        <a href="/dashboard" class="btn btn-secondary mt-3">Voltar para o Dashboard</a>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

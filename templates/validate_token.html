@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validar Token</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Validar Token</h1>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                Verificar Token
+            </div>
+            <div class="card-body">
+                <form action="/validate_token" method="POST">
+                    <div class="mb-3">
+                        <label for="token" class="form-label">Digite o Token:</label>
+                        <input type="text" name="token" class="form-control" placeholder="Digite o token" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Validar Token</button>
+                </form>
+            </div>
+        </div>
+
+        <h2 class="text-center mb-4">Tokens Validados</h2>
+
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Ação</th>
+                    <th>Token</th>
+                    <th>Expiração</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for token in validated_tokens %}
+                <tr>
+                    <td>{{ token.action }}</td>
+                    <td>{{ token.token }}</td>
+                    <td>{{ token.expiration_date.strftime('%d/%m/%Y') }}</td>
+                    <td>{{ 'Usado' if token.used else 'Não Usado' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Botão para voltar ao dashboard -->
+        <a href="/dashboard" class="btn btn-secondary mt-3">Voltar para o Dashboard</a>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
